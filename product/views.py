@@ -4,6 +4,7 @@ from rest_framework import status
 from django.shortcuts import render
 from .serializers import *
 from .models import Category, Product, Review
+from django.db.models import Avg
 
 @api_view(['GET'])
 def category_detail_api_view(request, id):
@@ -47,12 +48,22 @@ def product_detail_api_view(request, id):
 def product_list_api_view(request):
     
     products = Product.objects.all()
-    list_ = ProductListSerializer(products, many = True).data
     
-    return Response(
-        data = list_,
-        status = status.HTTP_200_OK
-    )
+    # list_ = ProductListSerializer(products, many = True).data
+    
+    # return Response(
+    #     data = list_,
+    #     status = status.HTTP_200_OK
+    # )
+    
+    #HW2
+    
+    serializer = ProductListSerializer(products, many = True)
+    
+    return Response({
+        'products_count': products.count(),
+        'products': serializer.data
+    })
     
 @api_view(['GET'])
 def review_detail_api_view(request, id):
@@ -77,3 +88,18 @@ def review_list_api_view(request):
         data = list_,
         status = status.HTTP_200_OK
     )
+    
+@api_view(['GET'])
+def product_review_list_api_view(request):
+    products = Product.objects.all()
+    
+    list_ = ProductReviewListSerializer(
+        products,
+        many=True
+    ).data
+    
+    return Response(
+        data = list_,
+        status = status.HTTP_200_OK
+    )
+    

@@ -14,9 +14,10 @@ class Product(models.Model):
     
     def __str__(self):
         return self.title
+    
 class Review(models.Model):
     text = models.TextField(null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
+    stars = models.IntegerField(choices = ((i,i) for i in range(1,6)), null=True)
     def __str__(self):
         return self.text
