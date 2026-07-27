@@ -48,23 +48,16 @@ class ProductReviewListSerializer(serializers.ModelSerializer):
         read_only = True
     )
     
-    average_rating = serializers.SerializerMethodField()
+    average_rating = serializers.FloatField(read_only = True)
     
     class Meta:
         model = Product
         fields = [
             'id',
             'title',
+            'description',
             'price',
             'reviews',
             'average_rating'
         ]
     
-    def get_average_rating(self, product):
-        reviews = product.review_set.all()
-        
-        if reviews:
-            total = sum(review.stars for review in reviews)
-            return total/ len(reviews)
-
-        return 0

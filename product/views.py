@@ -91,15 +91,11 @@ def review_list_api_view(request):
     
 @api_view(['GET'])
 def product_review_list_api_view(request):
-    products = Product.objects.all()
+    products = Product.objects.annotate(
+        average_rating = Avg('review__stars')
+    ).prefetch_related('review_set')
     
-    list_ = ProductReviewListSerializer(
-        products,
-        many=True
-    ).data
+    serializer = ProductReviewListSerializer(products, many = True)
     
-    return Response(
-        data = list_,
-        status = status.HTTP_200_OK
-    )
+    return Response(serializer.data)
     
