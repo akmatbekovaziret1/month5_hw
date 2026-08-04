@@ -22,6 +22,10 @@ def category_detail_update_api_view(request, id):
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == "PUT":
+        serializer = CategoryValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+        
         category.name = request.data.get('name')
         category.save()
         return Response(
@@ -41,6 +45,10 @@ def category_list_create_api_view(request):
         )
         
     elif request.method == 'POST':
+        serializer = CategoryValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+        
         name = request.data.get('name')
         category = Category.objects.create(
             name = name
@@ -67,6 +75,9 @@ def product_detail_update_api_view(request, id):
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
+        serializer = ProductValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
         product.title = request.data.get("title")
         product.description = request.data.get('description')
         product.price = request.data.get('price')
@@ -101,6 +112,11 @@ def product_list_create_api_view(request):
         # description = models.TextField(null=True, blank=True)
         # price = models.FloatField()
         # category = models.ForeignKey(Category, on_delete=models.CASCADE)
+        
+        serializer = ProductValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+        
         title = request.data.get('title')
         description = request.data.get('description')
         price = request.data.get('price')
@@ -134,6 +150,10 @@ def review_detail_update_api_view(request, id):
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == "PUT":
+        serializer = ReviewValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+        
         review.text = request.data.get('text')
         review.product_id = request.data.get('product_id')
         review.stars = request.data.get('stars')
@@ -153,6 +173,9 @@ def review_list_create_api_view(request):
             status = status.HTTP_200_OK
         )
     elif request.method == 'POST':
+        serializer = ReviewValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
         text = request.data.get('text')
         product_id = request.data.get('product_id')
         stars = request.data.get('stars')
