@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Category, Product, Review
 from rest_framework.exceptions import ValidationError
+
 # Category
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
